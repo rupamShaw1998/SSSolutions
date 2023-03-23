@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import moment from "moment";
+import { Box, CityText, DetailBox, Heading, IconBox, InfoBox, InfoProps, StyledButton, StyledInput, StyledSpan, TempBox, TempText, TimeText, WeatherBox } from "./Weather.styled";
 
 export const Weather = () => {
     const [city,setCity] = useState("");
@@ -19,50 +20,50 @@ export const Weather = () => {
     }
 
     return (
-        <div className="weather">
-            <h1>
+        <WeatherBox>
+            <Heading>
                 Weather App
-            </h1>
-            <input 
+            </Heading>
+            <StyledInput 
                 type="text" 
                 placeholder="Enter city"
                 onChange={(e) => setCity(e.target.value)}
             />
-            <button onClick={submitHandler}>Submit</button>
+            <StyledButton onClick={submitHandler}>Submit</StyledButton>
             {
                 Object.keys(data).length!==0? 
                 <div>
-                    <div className="weather-details">
-                        <p>{data.name}, {data.sys.country}. Weather</p>
-                        <p>As of {moment.utc(data.dt,'X').add(data.timezone,'seconds').format('HH:mm A')}</p>
-                        <div style={{display: "flex"}}>
-                            <h1>{Math.round(data.main.temp-273)}°C</h1>
-                            <div>
+                    <DetailBox>
+                        <CityText>{data.name}, {data.sys.country}. Weather</CityText>
+                        <TimeText>As of {moment.utc(data.dt,'X').add(data.timezone,'seconds').format('HH:mm A')}</TimeText>
+                        <TempBox>
+                            <TempText>{Math.round(data.main.temp-273)}°</TempText>
+                            <IconBox>
                                 <img src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt="#" />
-                                <p>{data.weather[0].main}</p>
-                            </div>
+                                <div>{data.weather[0].main}</div>
+                            </IconBox>
+                        </TempBox>
+                        <div>{data.weather[0].description}</div>
+                    </DetailBox>
 
-                        </div>
-                        <p>{data.weather[0].description}</p>
-                    </div>
-                    <div style={{display: "flex"}}>
-                        <div>
-                            <div>High/Low {data.main.temp_max}/{data.main.temp_min}</div>
-                            <div>Humidity {data.main.humidity} %</div>
-                            <div>Pressure {data.main.pressure} hPa</div>
-                            <div>Visibility {data.visibility/1000} Km </div>
-                        </div>
-                        <div>
-                            <div>Wind {data.wind.speed} Km/hr</div>
-                            <div>Wind Direction {data.wind.deg}° deg</div>
-                            <div>Sunrise {moment.utc(data.sys.sunrise,'X').add(data.timezone,'seconds').format('HH:mm A')}</div>
-                            <div>Sunset {moment.utc(data.sys.sunset,'X').add(data.timezone,'seconds').format('HH:mm A')}</div>
-                        </div>
-                    </div>
+                    <InfoBox>
+                        <Box>
+                            <InfoProps>High/Low <StyledSpan>{Math.round(data.main.temp_max-273)}/{Math.round(data.main.temp_min-273)}</StyledSpan></InfoProps>
+                            <InfoProps>Humidity <StyledSpan>{data.main.humidity} %</StyledSpan></InfoProps>
+                            <InfoProps>Pressure <StyledSpan>{data.main.pressure} hPa</StyledSpan></InfoProps>
+                            <InfoProps>Visibility <StyledSpan>{data.visibility/1000} Km </StyledSpan></InfoProps>
+                        </Box>
+                        <Box>
+                            <InfoProps>Wind <StyledSpan>{data.wind.speed} Km/hr</StyledSpan></InfoProps>
+                            <InfoProps>Wind Direction <StyledSpan>{data.wind.deg}° deg</StyledSpan></InfoProps>
+                            <InfoProps>Sunrise <StyledSpan>{moment.utc(data.sys.sunrise,'X').add(data.timezone,'seconds').format('HH:mm A')}</StyledSpan></InfoProps>
+                            <InfoProps>Sunset <StyledSpan>{moment.utc(data.sys.sunset,'X').add(data.timezone,'seconds').format('HH:mm A')}</StyledSpan></InfoProps>
+                        </Box>
+                    </InfoBox>
                 </div>
                 :
                 null
             }
-        </div>
+        </WeatherBox>
     )
 }
